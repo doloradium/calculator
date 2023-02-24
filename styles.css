@@ -337,7 +337,7 @@ h1 {
 
 .calculator {
   margin: auto;
-  width: 300px;
+  width: 350px;
   padding: 0;
   border-radius: 0;
   border-radius: 5px;
@@ -373,7 +373,7 @@ h1 {
 .buttons__item {
   background-color: lightgrey;
   margin: 0;
-  height: 70px;
+  height: 60px;
   display: flex;
   font-size: 18px;
   align-items: center;
@@ -392,14 +392,24 @@ h1 {
   transition: 0.3s;
 }
 
-.buttons__item:last-child {
+.buttons__item-delete {
   border-radius: 0 0 9px 0;
+  background-color: #acd4ff;
 }
 
-.buttons__item:nth-child(13) {
+.buttons__item-delete:hover {
+  background-color: #c2dfff;
+  transition: 0.3s;
+}
+
+.buttons__item-row {
+  grid-column: 1 / 4;
+  background-color: #2790ff;
+  color: white;
   border-radius: 0 0 0 9px;
 }
 
-.buttons__item-double {
-  grid-column: 2 / 4;
+.buttons__item-row:hover {
+  background-color: #6db3fe;
+  transition: 0.3s;
 }

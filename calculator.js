@@ -5,6 +5,12 @@ let plus = document.getElementById('plus')
 let minus = document.getElementById('minus')
 let divide = document.getElementById('divide')
 let multiply = document.getElementById('multiply')
+let leftBracket = document.getElementById('leftBracket')
+let rightBracket = document.getElementById('rightBracket')
+let square = document.getElementById('square')
+let squareRoot = document.getElementById('squareRoot')
+let remove = document.getElementById('remove')
+let deleteAll = document.getElementById('delete')
 let index
 let memory = []
 let resultString = '0'
@@ -23,6 +29,18 @@ divide.addEventListener('click', function() {
 
 multiply.addEventListener('click', function() {
     memory.push('×')
+})
+
+leftBracket.addEventListener('click', function() {
+    memory.push('(')
+})
+
+rightBracket.addEventListener('click', function() {
+    memory.push(')')
+})
+
+square.addEventListener('click', function() {
+    memory.push('^')
 })
 
 equals.addEventListener('click', function() {
@@ -54,7 +72,7 @@ equals.addEventListener('click', function() {
             memory.splice(index, 1)
         }
     }
-    screen.textContent = resultString[0].toFixed(2)
+    screen.textContent = Math.floor(resultString[0] * 100) / 100
 })
 
 Array.prototype.forEach.call(button, function(e) {
@@ -62,5 +80,13 @@ Array.prototype.forEach.call(button, function(e) {
         if (e.textContent !== '=') {
             screen.textContent += e.textContent
         }
-    });
-});
+    })
+})
+
+remove.addEventListener('click', function() {
+    screen.textContent = screen.textContent.slice(0, -2)
+})
+
+deleteAll.addEventListener('click', function() {
+    screen.textContent = ' '
+})
