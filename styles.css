@@ -347,13 +347,16 @@ h1 {
   height: 150px;
   margin: 0;
   position: relative;
-  padding: 15px 25px;
+  padding: 13px 23px;
   border-radius: 0;
   font-weight: 500;
   border: 1px solid #bababa;
   border-bottom: none;
   font-size: 30px;
   border-radius: 10px 10px 0 0;
+  word-wrap: break-word;
+  line-height: 1.4;
+  overflow: hidden;
 }
 
 .buttons {

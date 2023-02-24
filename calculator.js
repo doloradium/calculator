@@ -14,34 +14,34 @@ plus.addEventListener('click', function() {
 })
 
 minus.addEventListener('click', function() {
-    memory.push('-')
+    memory.push('−')
 })
 
 divide.addEventListener('click', function() {
-    memory.push('/')
+    memory.push('÷')
 })
 
 multiply.addEventListener('click', function() {
-    memory.push('*')
+    memory.push('×')
 })
 
 equals.addEventListener('click', function() {
-    resultString = screen.textContent.split('+').join(',').split('-').join(',').split('*').join(',').split('/').join(',').split(',')
+    resultString = screen.textContent.split('+').join(',').split('−').join(',').split('×').join(',').split('÷').join(',').split(',')
     let memoryLength = memory.length
     for (let i = 0; i < memoryLength; i++) {
-        index = memory.indexOf('/')
+        index = memory.indexOf('÷')
         if (index >= 0) {
             resultString[index] /= resultString[index + 1]
             resultString.splice(index + 1, 1)
             memory.splice(index, 1)
         }
-        index = memory.indexOf('*')
+        index = memory.indexOf('×')
         if (index >= 0) {
             resultString[index] *= resultString[index + 1]
             resultString.splice(index + 1, 1)
             memory.splice(index, 1)
         }
-        index = memory.indexOf('-')
+        index = memory.indexOf('−')
         if (index >= 0) {
             resultString[index] -= resultString[index + 1]
             resultString.splice(index + 1, 1)
@@ -54,10 +54,7 @@ equals.addEventListener('click', function() {
             memory.splice(index, 1)
         }
     }
-    console.log(memory)
-    memory = []
-    screen.textContent = Math.floor(Number(resultString[0] * 100)) / 100
-    screen.textContent = resultString[0]
+    screen.textContent = resultString[0].toFixed(2)
 })
 
 Array.prototype.forEach.call(button, function(e) {
