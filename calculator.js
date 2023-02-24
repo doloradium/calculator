@@ -72,7 +72,7 @@ equals.addEventListener('click', function() {
             memory.splice(index, 1)
         }
     }
-    screen.textContent = Math.floor(resultString[0] * 100) / 100
+    screen.textContent = Math.round(resultString[0] * 100) / 100
 })
 
 Array.prototype.forEach.call(button, function(e) {
