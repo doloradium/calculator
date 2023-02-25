@@ -24,12 +24,11 @@ let input1
 
 /*
 - в качестве второго операнда нельзя использовать отрицательное число
-- отсутствует работа со скобками
 - отсутствует возведение в квадрат
 - отсутствует извлечение квадратного корня из числа
 */
 
-equals.addEventListener('click', function() {
+equals.addEventListener('click', function () {
     resultString = screen.textContent
     for (let i = 0; i < resultString.length; i++) {
         if (resultString.includes('(')) {
@@ -46,13 +45,19 @@ equals.addEventListener('click', function() {
 })
 
 brackets = (input) => {
-    console.log(input)
     if (input.includes('(')) {
-        bracketIndex = input.length - input.split('').reverse().join('').indexOf(')') - 1
-        splicedArray = input.slice(input.indexOf('(') + 1, bracketIndex)
-        input = input.replace('(' + splicedArray + ')', calculations(splicedArray))
+        if (input.indexOf(')', input.indexOf('(') + 1) < input.indexOf('(', input.indexOf('(') + 1)) {
+            splicedArray = input.slice(input.indexOf('(') + 1, input.indexOf(')'))
+            console.log(input)
+            console.log(splicedArray)
+            input = input.replace('(' + splicedArray + ')', calculations(splicedArray))
+        }
+        if (input.indexOf(')', input.indexOf('(') + 1) > input.indexOf('(', input.indexOf('(') + 1)) {
+            bracketIndex = input.length - input.split('').reverse().join('').indexOf(')') - 1
+            splicedArray = input.slice(input.indexOf('(') + 1, bracketIndex)
+            input = input.replace('(' + splicedArray + ')', calculations(splicedArray))
+        }
     }
-    console.log(input)
     if (typeof input !== typeof 'string') {
         input = calculations(input)
     }
@@ -156,19 +161,19 @@ calculations = (input) => {
     return innerArray[0]
 }
 
-Array.prototype.forEach.call(button, function(e) {
-    e.addEventListener('click', function() {
+Array.prototype.forEach.call(button, function (e) {
+    e.addEventListener('click', function () {
         if (e.textContent !== '=') {
             screen.textContent += e.textContent
         }
     })
 })
 
-remove.addEventListener('click', function() {
+remove.addEventListener('click', function () {
     screen.textContent = screen.textContent.slice(0, -2)
 })
 
-deleteAll.addEventListener('click', function() {
+deleteAll.addEventListener('click', function () {
     memory = []
     resultString = []
     screen.textContent = ''
