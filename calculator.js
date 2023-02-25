@@ -13,67 +13,148 @@ let remove = document.getElementById('remove')
 let deleteAll = document.getElementById('delete')
 let index
 let memory = []
-let resultString = '0'
+let resultString = ''
+let innerArray = []
+let resultArray = []
+let position
+let splicedArray
+let output
+let bracketIndex
+let input1
 
-plus.addEventListener('click', function() {
-    memory.push('+')
-})
-
-minus.addEventListener('click', function() {
-    memory.push('−')
-})
-
-divide.addEventListener('click', function() {
-    memory.push('÷')
-})
-
-multiply.addEventListener('click', function() {
-    memory.push('×')
-})
-
-leftBracket.addEventListener('click', function() {
-    memory.push('(')
-})
-
-rightBracket.addEventListener('click', function() {
-    memory.push(')')
-})
-
-square.addEventListener('click', function() {
-    memory.push('^')
-})
+/*
+- в качестве второго операнда нельзя использовать отрицательное число
+- отсутствует работа со скобками
+- отсутствует возведение в квадрат
+- отсутствует извлечение квадратного корня из числа
+*/
 
 equals.addEventListener('click', function() {
-    resultString = screen.textContent.split('+').join(',').split('−').join(',').split('×').join(',').split('÷').join(',').split(',')
+    resultString = screen.textContent
+    for (let i = 0; i < resultString.length; i++) {
+        if (resultString.includes('(')) {
+            resultString = brackets(resultString)
+        }
+    }
+    screen.textContent = Math.round(calculations(resultString) * 100) / 100
+    if (screen.textContent == 'NaN' || screen.textContent == 'Infinity') {
+        screen.textContent = 'Error'
+    }
+    memory = []
+    resultString = []
+    resultArray = []
+})
+
+brackets = (input) => {
+    console.log(input)
+    if (input.includes('(')) {
+        bracketIndex = input.length - input.split('').reverse().join('').indexOf(')') - 1
+        splicedArray = input.slice(input.indexOf('(') + 1, bracketIndex)
+        input = input.replace('(' + splicedArray + ')', calculations(splicedArray))
+    }
+    console.log(input)
+    if (typeof input !== typeof 'string') {
+        input = calculations(input)
+    }
+    return input
+}
+
+calculations = (input) => {
+    if (input.includes('(')) {
+        input = brackets(input)
+    }
+    innerArray = input.split('+').join(',').split('−').join(',').split('×').join(',').split('÷').join(',').split(',')
+    for (let i = 0; i < input.length; i++) {
+        // if (resultString.charAt(i) == '+' && resultString.charAt(Number(i) + 1) == '−') {
+        //     memory.push('pn')
+        //     resultString = resultString.replace('+−', '')
+        //     resultArray.splice(i, 1)
+        // }
+        // if (resultString.charAt(i) == '−' && resultString.charAt(Number(i) + 1) == '−') {
+        //     memory.push('min')
+        //     resultString = resultString.replace('−−', '')
+        //     resultArray.splice(i, 1)
+        // }
+        // if (resultString.charAt(i) == '÷' && resultString.charAt(Number(i) + 1) == '−') {
+        //     memory.push('dn')
+        //     resultString = resultString.replace('÷−', '')
+        //     resultArray.splice(i, 1)
+        // }
+        // if (resultString.charAt(i) == '×' && resultString.charAt(Number(i) + 1) == '−') {
+        //     memory.push('mun')
+        //     resultString = resultString.replace('×−', '')
+        //     resultArray.splice(i, 1)
+        // }
+        if (input.charAt(i) == '+') {
+            memory.push('+')
+        }
+        if (input.charAt(i) == '−') {
+            memory.push('−')
+        }
+        if (input.charAt(i) == '÷') {
+            memory.push('÷')
+        }
+        if (input.charAt(i) == '×') {
+            memory.push('×')
+        }
+    }
     let memoryLength = memory.length
     for (let i = 0; i < memoryLength; i++) {
+        // index = memory.indexOf('pn')
+        // if (index >= 0) {
+        //     resultArray[index] = +resultArray[index] - +resultArray[index + 1]
+        //     console.log(resultArray)
+        //     console.log(memory)
+        //     resultArray.splice(index + 1, 1)
+        //     memory.splice(index, 1)
+        //     console.log(resultArray)
+        //     console.log(memory)
+        // }
+        // index = memory.indexOf('min')
+        // if (index >= 0) {
+        //     resultArray[index] = +resultArray[index] + +resultArray[index + 1]
+        //     resultArray.splice(index + 1, 1)
+        //     memory.splice(index, 1)
+        // }
+        // index = memory.indexOf('dn')
+        // if (index >= 0) {
+        //     resultArray[index] = +resultArray[index] / (-1 * resultArray[index + 1])
+        //     resultArray.splice(index + 1, 1)
+        //     memory.splice(index, 1)
+        // }
+        // index = memory.indexOf('mun')
+        // if (index >= 0) {
+        //     resultArray[index] = +resultArray[index] * (-1 * resultArray[index + 1])
+        //     resultArray.splice(index + 1, 1)
+        //     memory.splice(index, 1)
+        // }
         index = memory.indexOf('÷')
         if (index >= 0) {
-            resultString[index] /= resultString[index + 1]
-            resultString.splice(index + 1, 1)
+            innerArray[index] /= innerArray[index + 1]
+            innerArray.splice(index + 1, 1)
             memory.splice(index, 1)
         }
         index = memory.indexOf('×')
         if (index >= 0) {
-            resultString[index] *= resultString[index + 1]
-            resultString.splice(index + 1, 1)
+            innerArray[index] *= innerArray[index + 1]
+            innerArray.splice(index + 1, 1)
             memory.splice(index, 1)
         }
         index = memory.indexOf('−')
         if (index >= 0) {
-            resultString[index] -= resultString[index + 1]
-            resultString.splice(index + 1, 1)
+            innerArray[index] -= innerArray[index + 1]
+            innerArray.splice(index + 1, 1)
             memory.splice(index, 1)
         }
         index = memory.indexOf('+')
         if (index >= 0) {
-            resultString[index] = +resultString[index] + +resultString[index + 1]
-            resultString.splice(index + 1, 1)
+            innerArray[index] = +innerArray[index] + +innerArray[index + 1]
+            innerArray.splice(index + 1, 1)
             memory.splice(index, 1)
         }
     }
-    screen.textContent = Math.round(resultString[0] * 100) / 100
-})
+    return innerArray[0]
+}
 
 Array.prototype.forEach.call(button, function(e) {
     e.addEventListener('click', function() {
@@ -88,5 +169,7 @@ remove.addEventListener('click', function() {
 })
 
 deleteAll.addEventListener('click', function() {
-    screen.textContent = ' '
+    memory = []
+    resultString = []
+    screen.textContent = ''
 })
