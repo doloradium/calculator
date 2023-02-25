@@ -1,12 +1,6 @@
 let screen = document.querySelector('.screen')
 let button = document.querySelectorAll('.buttons__item')
 let equals = document.getElementById('equals')
-let plus = document.getElementById('plus')
-let minus = document.getElementById('minus')
-let divide = document.getElementById('divide')
-let multiply = document.getElementById('multiply')
-let leftBracket = document.getElementById('leftBracket')
-let rightBracket = document.getElementById('rightBracket')
 let square = document.getElementById('square')
 let squareRoot = document.getElementById('squareRoot')
 let remove = document.getElementById('remove')
@@ -24,8 +18,9 @@ let input1
 
 /*
 - в качестве второго операнда нельзя использовать отрицательное число
-- отсутствует возведение в квадрат
 - отсутствует извлечение квадратного корня из числа
+- сделать так, чтобы нельзя было ввести два знака подряд
+- бинд на кнопки
 */
 
 equals.addEventListener('click', function () {
@@ -48,8 +43,6 @@ brackets = (input) => {
     if (input.includes('(')) {
         if (input.indexOf(')', input.indexOf('(') + 1) < input.indexOf('(', input.indexOf('(') + 1)) {
             splicedArray = input.slice(input.indexOf('(') + 1, input.indexOf(')'))
-            console.log(input)
-            console.log(splicedArray)
             input = input.replace('(' + splicedArray + ')', calculations(splicedArray))
         }
         if (input.indexOf(')', input.indexOf('(') + 1) > input.indexOf('(', input.indexOf('(') + 1)) {
@@ -68,8 +61,14 @@ calculations = (input) => {
     if (input.includes('(')) {
         input = brackets(input)
     }
+
     innerArray = input.split('+').join(',').split('−').join(',').split('×').join(',').split('÷').join(',').split(',')
     for (let i = 0; i < input.length; i++) {
+        for (let i = 0; i < innerArray.length; i++) {
+            if (innerArray[i].indexOf('²') != -1) {
+                innerArray[i] = innerArray[i].replace('²', '')
+            }
+        }
         // if (resultString.charAt(i) == '+' && resultString.charAt(Number(i) + 1) == '−') {
         //     memory.push('pn')
         //     resultString = resultString.replace('+−', '')
@@ -90,6 +89,9 @@ calculations = (input) => {
         //     resultString = resultString.replace('×−', '')
         //     resultArray.splice(i, 1)
         // }
+        if (input.charAt(i) == '²') {
+            memory.push('²')
+        }
         if (input.charAt(i) == '+') {
             memory.push('+')
         }
@@ -133,17 +135,28 @@ calculations = (input) => {
         //     resultArray.splice(index + 1, 1)
         //     memory.splice(index, 1)
         // }
-        index = memory.indexOf('÷')
-        if (index >= 0) {
-            innerArray[index] /= innerArray[index + 1]
-            innerArray.splice(index + 1, 1)
-            memory.splice(index, 1)
+        for (let i = 0; i < innerArray.length; i++) {
+            index = memory.indexOf('²')
+            if (memory.includes('²') == true) {
+                innerArray[index] *= innerArray[index]
+                memory.splice(index, 1)
+            }
         }
-        index = memory.indexOf('×')
-        if (index >= 0) {
-            innerArray[index] *= innerArray[index + 1]
-            innerArray.splice(index + 1, 1)
-            memory.splice(index, 1)
+        for (let i = 0; i < innerArray.length; i++) {
+            index = memory.indexOf('÷')
+            if (memory.includes('÷') == true) {
+                innerArray[index] /= innerArray[index + 1]
+                innerArray.splice(index + 1, 1)
+                memory.splice(index, 1)
+            }
+        }
+        for (let i = 0; i < innerArray.length; i++) {
+            index = memory.indexOf('×')
+            if (memory.includes('×') == true) {
+                innerArray[index] *= innerArray[index + 1]
+                innerArray.splice(index + 1, 1)
+                memory.splice(index, 1)
+            }
         }
         index = memory.indexOf('−')
         if (index >= 0) {
@@ -167,6 +180,10 @@ Array.prototype.forEach.call(button, function (e) {
             screen.textContent += e.textContent
         }
     })
+})
+
+square.addEventListener('click', function () {
+    screen.textContent = screen.textContent.slice(0, -2) + '²'
 })
 
 remove.addEventListener('click', function () {
