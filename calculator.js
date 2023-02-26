@@ -20,7 +20,8 @@ let output
 let bracketIndex
 let input1
 
-//квадрат отрицательного числа должен быть положительным 
+//после эррора можно писать
+//адаптив
 
 squareRoot.addEventListener('click', function () {
     resultString = equals(resultString)

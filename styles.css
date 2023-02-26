@@ -335,6 +335,11 @@ h1 {
   margin: 50px 0;
 }
 
+.wrapper {
+  padding: 20px;
+  margin-top: calc(50vh - 380px);
+}
+
 .calculator {
   margin: auto;
   width: 350px;
@@ -412,4 +417,10 @@ h1 {
 .buttons__item-row:hover {
   background-color: #6db3fe;
   transition: 0.3s;
+}
+
+@media screen and (max-width: 450px) {
+  .calculator {
+    width: 100%;
+  }
 }
