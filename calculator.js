@@ -2,6 +2,10 @@ let screen = document.querySelector('.screen')
 let button = document.querySelectorAll('.buttons__item')
 let equals = document.getElementById('equals')
 let square = document.getElementById('square')
+let plus = document.getElementById('plus')
+let minus = document.getElementById('minus')
+let divide = document.getElementById('divide')
+let multiply = document.getElementById('multiply')
 let squareRoot = document.getElementById('squareRoot')
 let remove = document.getElementById('remove')
 let deleteAll = document.getElementById('delete')
@@ -16,21 +20,11 @@ let output
 let bracketIndex
 let input1
 
-/*
-- в качестве второго операнда нельзя использовать отрицательное число
-- отсутствует извлечение квадратного корня из числа
-- сделать так, чтобы нельзя было ввести два знака подряд
-- бинд на кнопки
-*/
+//квадрат отрицательного числа должен быть положительным 
 
-equals.addEventListener('click', function () {
-    resultString = screen.textContent
-    for (let i = 0; i < resultString.length; i++) {
-        if (resultString.includes('(')) {
-            resultString = brackets(resultString)
-        }
-    }
-    screen.textContent = Math.round(calculations(resultString) * 100) / 100
+squareRoot.addEventListener('click', function () {
+    resultString = equals(resultString)
+    screen.textContent = Math.round(Math.sqrt(resultString) * 100) / 100
     if (screen.textContent == 'NaN' || screen.textContent == 'Infinity') {
         screen.textContent = 'Error'
     }
@@ -38,6 +32,30 @@ equals.addEventListener('click', function () {
     resultString = []
     resultArray = []
 })
+
+equals.addEventListener('click', function () {
+    resultString = equals(resultString)
+    screen.textContent = Math.round(resultString * 100) / 100
+    if (screen.textContent == 'NaN' || screen.textContent == 'Infinity') {
+        screen.textContent = 'Error'
+    }
+    memory = []
+    resultString = []
+    resultArray = []
+})
+
+equals = (input) => {
+    input = screen.textContent
+
+    for (let i = 0; i < input.length; i++) {
+        if (input.includes('(')) {
+            input = brackets(input)
+        }
+    }
+    // return input
+    input = calculations(input)
+    return input
+}
 
 brackets = (input) => {
     if (input.includes('(')) {
@@ -69,26 +87,6 @@ calculations = (input) => {
                 innerArray[i] = innerArray[i].replace('²', '')
             }
         }
-        // if (resultString.charAt(i) == '+' && resultString.charAt(Number(i) + 1) == '−') {
-        //     memory.push('pn')
-        //     resultString = resultString.replace('+−', '')
-        //     resultArray.splice(i, 1)
-        // }
-        // if (resultString.charAt(i) == '−' && resultString.charAt(Number(i) + 1) == '−') {
-        //     memory.push('min')
-        //     resultString = resultString.replace('−−', '')
-        //     resultArray.splice(i, 1)
-        // }
-        // if (resultString.charAt(i) == '÷' && resultString.charAt(Number(i) + 1) == '−') {
-        //     memory.push('dn')
-        //     resultString = resultString.replace('÷−', '')
-        //     resultArray.splice(i, 1)
-        // }
-        // if (resultString.charAt(i) == '×' && resultString.charAt(Number(i) + 1) == '−') {
-        //     memory.push('mun')
-        //     resultString = resultString.replace('×−', '')
-        //     resultArray.splice(i, 1)
-        // }
         if (input.charAt(i) == '²') {
             memory.push('²')
         }
@@ -107,34 +105,6 @@ calculations = (input) => {
     }
     let memoryLength = memory.length
     for (let i = 0; i < memoryLength; i++) {
-        // index = memory.indexOf('pn')
-        // if (index >= 0) {
-        //     resultArray[index] = +resultArray[index] - +resultArray[index + 1]
-        //     console.log(resultArray)
-        //     console.log(memory)
-        //     resultArray.splice(index + 1, 1)
-        //     memory.splice(index, 1)
-        //     console.log(resultArray)
-        //     console.log(memory)
-        // }
-        // index = memory.indexOf('min')
-        // if (index >= 0) {
-        //     resultArray[index] = +resultArray[index] + +resultArray[index + 1]
-        //     resultArray.splice(index + 1, 1)
-        //     memory.splice(index, 1)
-        // }
-        // index = memory.indexOf('dn')
-        // if (index >= 0) {
-        //     resultArray[index] = +resultArray[index] / (-1 * resultArray[index + 1])
-        //     resultArray.splice(index + 1, 1)
-        //     memory.splice(index, 1)
-        // }
-        // index = memory.indexOf('mun')
-        // if (index >= 0) {
-        //     resultArray[index] = +resultArray[index] * (-1 * resultArray[index + 1])
-        //     resultArray.splice(index + 1, 1)
-        //     memory.splice(index, 1)
-        // }
         for (let i = 0; i < innerArray.length; i++) {
             index = memory.indexOf('²')
             if (memory.includes('²') == true) {
@@ -176,11 +146,41 @@ calculations = (input) => {
 
 Array.prototype.forEach.call(button, function (e) {
     e.addEventListener('click', function () {
-        if (e.textContent !== '=') {
-            screen.textContent += e.textContent
-        }
+        if (e.textContent == '=' || e.textContent == '√') { }
+        else screen.textContent += e.textContent
     })
 })
+
+plus.addEventListener('click', function () {
+    onlyOne('+', '−', '÷', '×')
+})
+
+minus.addEventListener('click', function () {
+    onlyOne('−', '÷', '×', '+')
+})
+
+divide.addEventListener('click', function () {
+    onlyOne('÷', '×', '−', '+')
+})
+
+multiply.addEventListener('click', function () {
+    onlyOne('×', '−', '+', '÷')
+})
+
+onlyOne = (main, side1, side2, side3) => {
+    if (screen.textContent.charAt(screen.textContent.length - 2) == main && screen.textContent.charAt(screen.textContent.length - 1) == main) {
+        screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1)
+    }
+    if (screen.textContent.charAt(screen.textContent.length - 2) == side1 && screen.textContent.charAt(screen.textContent.length - 1) == main) {
+        screen.textContent = screen.textContent.slice(0, Number(screen.textContent.length) - 2) + main
+    }
+    if (screen.textContent.charAt(screen.textContent.length - 2) == side2 && screen.textContent.charAt(screen.textContent.length - 1) == main) {
+        screen.textContent = screen.textContent.slice(0, Number(screen.textContent.length) - 2) + main
+    }
+    if (screen.textContent.charAt(screen.textContent.length - 2) == side3 && screen.textContent.charAt(screen.textContent.length - 1) == main) {
+        screen.textContent = screen.textContent.slice(0, Number(screen.textContent.length) - 2) + main
+    }
+}
 
 square.addEventListener('click', function () {
     screen.textContent = screen.textContent.slice(0, -2) + '²'
