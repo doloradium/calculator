@@ -9,6 +9,7 @@ let multiply = document.getElementById('multiply')
 let squareRoot = document.getElementById('squareRoot')
 let remove = document.getElementById('remove')
 let deleteAll = document.getElementById('delete')
+let dot = document.getElementById('dot')
 let index
 let memory = []
 let resultString = ''
@@ -19,9 +20,6 @@ let splicedArray
 let output
 let bracketIndex
 let input1
-
-//после эррора можно писать
-//адаптив
 
 squareRoot.addEventListener('click', function () {
     resultString = equals(resultString)
@@ -148,27 +146,34 @@ calculations = (input) => {
 Array.prototype.forEach.call(button, function (e) {
     e.addEventListener('click', function () {
         if (e.textContent == '=' || e.textContent == '√') { }
+        else if (screen.textContent == 'Error' && e.textContent == '.') screen.textContent = '0' + e.textContent
+        else if (screen.textContent == '' && e.textContent == '.') screen.textContent = '0' + e.textContent
+        else if (screen.textContent == 'Error') screen.textContent = '' + e.textContent
         else screen.textContent += e.textContent
     })
 })
 
 plus.addEventListener('click', function () {
-    onlyOne('+', '−', '÷', '×')
+    onlyOne('+', '−', '÷', '×', '.')
 })
 
 minus.addEventListener('click', function () {
-    onlyOne('−', '÷', '×', '+')
+    onlyOne('−', '÷', '×', '+', '.')
 })
 
 divide.addEventListener('click', function () {
-    onlyOne('÷', '×', '−', '+')
+    onlyOne('÷', '×', '−', '+', '.')
 })
 
 multiply.addEventListener('click', function () {
-    onlyOne('×', '−', '+', '÷')
+    onlyOne('×', '−', '+', '÷', '.')
 })
 
-onlyOne = (main, side1, side2, side3) => {
+dot.addEventListener('click', function () {
+    onlyOne('.', '×', '−', '+', '÷')
+})
+
+onlyOne = (main, side1, side2, side3, side4) => {
     if (screen.textContent.charAt(screen.textContent.length - 2) == main && screen.textContent.charAt(screen.textContent.length - 1) == main) {
         screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1)
     }
@@ -179,6 +184,9 @@ onlyOne = (main, side1, side2, side3) => {
         screen.textContent = screen.textContent.slice(0, Number(screen.textContent.length) - 2) + main
     }
     if (screen.textContent.charAt(screen.textContent.length - 2) == side3 && screen.textContent.charAt(screen.textContent.length - 1) == main) {
+        screen.textContent = screen.textContent.slice(0, Number(screen.textContent.length) - 2) + main
+    }
+    if (screen.textContent.charAt(screen.textContent.length - 2) == side4 && screen.textContent.charAt(screen.textContent.length - 1) == main) {
         screen.textContent = screen.textContent.slice(0, Number(screen.textContent.length) - 2) + main
     }
 }
